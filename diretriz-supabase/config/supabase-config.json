@@ -1,0 +1,155 @@
+{
+  "project": {
+    "name": "diretriz-brand-system",
+    "displayName": "Diretriz · Brand System",
+    "description": "Backend Supabase para o Brand System Diretriz — diretrizes vivas, modulares e sincronizadas (Marca Mestre + sub-marcas).",
+    "version": "1.0.0",
+    "schema": "public",
+    "region": "sa-east-1",
+    "generatedAt": "2026-05-25"
+  },
+  "supabase": {
+    "url": "${SUPABASE_URL}",
+    "projectRef": "${SUPABASE_PROJECT_REF}",
+    "anonKey": "${SUPABASE_ANON_KEY}",
+    "serviceRoleKey": "${SUPABASE_SERVICE_ROLE_KEY}",
+    "jwtSecret": "${SUPABASE_JWT_SECRET}",
+    "db": {
+      "url": "${DATABASE_URL}",
+      "poolUrl": "${DATABASE_POOL_URL}",
+      "host": "db.${SUPABASE_PROJECT_REF}.supabase.co",
+      "port": 5432,
+      "database": "postgres",
+      "user": "postgres"
+    }
+  },
+  "extensions": ["pgcrypto", "citext", "pg_trgm"],
+  "auth": {
+    "enabled": true,
+    "siteUrl": "${AUTH_SITE_URL}",
+    "redirectUrls": ["${AUTH_REDIRECT_URL}"],
+    "emailConfirmations": true,
+    "providers": {
+      "email": { "enabled": true },
+      "sso": { "enabled": true, "provider": "${SSO_PROVIDER}", "domain": "${SSO_DOMAIN}" },
+      "google": { "enabled": false, "clientId": "${GOOGLE_OAUTH_CLIENT_ID}" }
+    },
+    "onSignupTrigger": "public.handle_new_user"
+  },
+  "storage": {
+    "url": "${SUPABASE_STORAGE_URL}",
+    "buckets": [
+      {
+        "id": "avatars",
+        "name": "${STORAGE_BUCKET_AVATARS}",
+        "public": false,
+        "fileSizeLimit": "5MB",
+        "allowedMimeTypes": ["image/png", "image/jpeg", "image/webp"],
+        "usedBy": ["profiles.avatar_url"]
+      },
+      {
+        "id": "brand-assets",
+        "name": "${STORAGE_BUCKET_BRAND_ASSETS}",
+        "public": false,
+        "fileSizeLimit": "100MB",
+        "allowedMimeTypes": [
+          "image/svg+xml", "image/png", "image/jpeg", "image/webp",
+          "application/pdf", "application/zip",
+          "font/otf", "font/ttf", "font/woff2",
+          "application/postscript", "text/html"
+        ],
+        "usedBy": ["assets.storage_path", "asset_files.storage_path"]
+      }
+    ]
+  },
+  "tables": [
+    { "name": "profiles", "domain": "auth", "rls": true, "primaryKey": "id" },
+    { "name": "brands", "domain": "brand", "rls": true, "primaryKey": "id" },
+    { "name": "brand_memberships", "domain": "auth", "rls": true, "primaryKey": "id" },
+    { "name": "sections", "domain": "navigation", "rls": true, "primaryKey": "id" },
+    { "name": "pages", "domain": "navigation", "rls": true, "primaryKey": "id" },
+    { "name": "page_tags", "domain": "navigation", "rls": true, "primaryKey": "id" },
+    { "name": "blocks", "domain": "content", "rls": true, "primaryKey": "id" },
+    { "name": "block_revisions", "domain": "content", "rls": true, "primaryKey": "id" },
+    { "name": "assets", "domain": "media", "rls": true, "primaryKey": "id" },
+    { "name": "asset_files", "domain": "media", "rls": true, "primaryKey": "id" },
+    { "name": "download_logs", "domain": "logs", "rls": true, "primaryKey": "id" },
+    { "name": "colors", "domain": "visual", "rls": true, "primaryKey": "id" },
+    { "name": "color_combinations", "domain": "visual", "rls": true, "primaryKey": "id" },
+    { "name": "typography_families", "domain": "visual", "rls": true, "primaryKey": "id" },
+    { "name": "typography_weights", "domain": "visual", "rls": true, "primaryKey": "id" },
+    { "name": "typography_specimens", "domain": "visual", "rls": true, "primaryKey": "id" },
+    { "name": "archetypes", "domain": "nucleo", "rls": true, "primaryKey": "id" },
+    { "name": "brand_values", "domain": "nucleo", "rls": true, "primaryKey": "id" },
+    { "name": "personas", "domain": "nucleo", "rls": true, "primaryKey": "id" },
+    { "name": "positioning_statements", "domain": "nucleo", "rls": true, "primaryKey": "id" },
+    { "name": "positioning_pillars", "domain": "nucleo", "rls": true, "primaryKey": "id" },
+    { "name": "competitors", "domain": "nucleo", "rls": true, "primaryKey": "id" },
+    { "name": "voice_traits", "domain": "verbal", "rls": true, "primaryKey": "id" },
+    { "name": "voice_examples", "domain": "verbal", "rls": true, "primaryKey": "id" },
+    { "name": "voice_registers", "domain": "verbal", "rls": true, "primaryKey": "id" },
+    { "name": "vocabulary_categories", "domain": "verbal", "rls": true, "primaryKey": "id" },
+    { "name": "vocabulary_words", "domain": "verbal", "rls": true, "primaryKey": "id" },
+    { "name": "word_territories", "domain": "verbal", "rls": true, "primaryKey": "id" },
+    { "name": "word_territory_words", "domain": "verbal", "rls": true, "primaryKey": "id" },
+    { "name": "manifestos", "domain": "verbal", "rls": true, "primaryKey": "id" },
+    { "name": "flags", "domain": "overview", "rls": true, "primaryKey": "id" },
+    { "name": "logos", "domain": "visual", "rls": true, "primaryKey": "id" },
+    { "name": "logo_misuses", "domain": "visual", "rls": true, "primaryKey": "id" },
+    { "name": "logo_min_sizes", "domain": "visual", "rls": true, "primaryKey": "id" },
+    { "name": "graphics", "domain": "visual", "rls": true, "primaryKey": "id" },
+    { "name": "icons", "domain": "visual", "rls": true, "primaryKey": "id" },
+    { "name": "photography_references", "domain": "visual", "rls": true, "primaryKey": "id" },
+    { "name": "photography_params", "domain": "visual", "rls": true, "primaryKey": "id" },
+    { "name": "embeds", "domain": "content", "rls": true, "primaryKey": "id" },
+    { "name": "share_links", "domain": "sharing", "rls": true, "primaryKey": "id" },
+    { "name": "page_access_grants", "domain": "auth", "rls": true, "primaryKey": "id" },
+    { "name": "quick_answers", "domain": "assistant", "rls": true, "primaryKey": "id" },
+    { "name": "quick_answer_citations", "domain": "assistant", "rls": true, "primaryKey": "id" },
+    { "name": "search_queries", "domain": "logs", "rls": true, "primaryKey": "id" },
+    { "name": "audit_logs", "domain": "logs", "rls": true, "primaryKey": "id" }
+  ],
+  "enums": [
+    "app_role", "membership_role", "brand_type", "sync_status",
+    "visibility_level", "content_status", "block_category", "color_palette",
+    "persona_tier", "voice_register", "vocabulary_kind", "asset_kind",
+    "file_format", "embed_kind", "theme_preference", "audit_action"
+  ],
+  "functions": [
+    { "name": "set_updated_at", "kind": "trigger" },
+    { "name": "handle_new_user", "kind": "trigger", "securityDefiner": true },
+    { "name": "handle_user_email_update", "kind": "trigger", "securityDefiner": true },
+    { "name": "handle_new_brand", "kind": "trigger", "securityDefiner": true },
+    { "name": "assign_block_position", "kind": "trigger" },
+    { "name": "snapshot_block_revision", "kind": "trigger" },
+    { "name": "handle_page_publish", "kind": "trigger" },
+    { "name": "enforce_single_primary_archetype", "kind": "trigger" },
+    { "name": "is_brand_member", "kind": "rpc", "securityDefiner": true },
+    { "name": "brand_role", "kind": "rpc", "securityDefiner": true },
+    { "name": "has_brand_role", "kind": "rpc", "securityDefiner": true },
+    { "name": "can_read_brand", "kind": "rpc", "securityDefiner": true },
+    { "name": "can_read_page", "kind": "rpc", "securityDefiner": true },
+    { "name": "log_download", "kind": "rpc", "securityDefiner": true },
+    { "name": "log_search", "kind": "rpc", "securityDefiner": true },
+    { "name": "write_audit", "kind": "rpc", "securityDefiner": true }
+  ],
+  "migrations": {
+    "order": [
+      "database/sql/supabase-schema.sql",
+      "database/sql/triggers.sql",
+      "database/sql/policies.sql",
+      "database/sql/seeds.sql"
+    ],
+    "runAs": "service_role"
+  },
+  "seed": {
+    "masterBrand": { "slug": "logotipo", "name": "LOGOTIPO", "id": "00000000-0000-0000-0000-000000000001" },
+    "subBrands": ["sub-marca-a", "sub-marca-b", "sub-marca-c"],
+    "sections": 5,
+    "pages": 20
+  },
+  "envFiles": {
+    "example": "config/.env.example",
+    "catalog": "config/env.variables.json"
+  }
+}
